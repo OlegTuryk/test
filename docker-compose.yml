@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  db:
+    platform: linux/x86_64
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=$POSTGRESQLDB_ROOT_PASSWORD
+      - POSTGRES_DB=$POSTGRESQLDB_DATABASE
+    ports:
+      - $POSTGRESQLDB_LOCAL_PORT:$POSTGRESQLDB_DOCKER_PORT
+  app:
+    depends_on:
+      - db
+    restart: unless-stopped
+    image: test_app
+    build: .
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+      - $DEBUG_PORT:$DEBUG_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url" : "jdbc:postgresql://db:$POSTGRESQLDB_DOCKER_PORT/$POSTGRESQLDB_DATABASE",
+        "spring.datasource.username" : "$POSTGRESQLDB_USER",
+        "spring.datasource.password" : "$POSTGRESQLDB_ROOT_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect",
+        "spring.datasource.driver-class-name" : "org.postgresql.Driver",
+        "spring.jpa.hibernate.ddl-auto" : "validate"
+      }'
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
