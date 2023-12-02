@@ -18,8 +18,6 @@ public class UserRegistrationRequestDto {
     @NotBlank
     private String lastName;
     @NotBlank
-    private String username;
-    @NotBlank
     @Length(min = 8, max = 32)
     private String password;
     @NotBlank

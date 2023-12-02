@@ -7,9 +7,6 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: username
-                  value: admin
-              - column:
                   name: email
                   value: admin@example.com
               - column:
@@ -29,7 +26,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: user_id
-                  valueComputed: (SELECT id FROM users WHERE username = 'admin')
+                  valueComputed: (SELECT id FROM users WHERE email = 'admin@example.com')
               - column:
                   name: role_id
                   valueComputed: (SELECT id FROM roles WHERE name = 'ROLE_ADMIN')

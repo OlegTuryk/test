@@ -1,4 +1,4 @@
-package oleg.turyk.test.service;
+package oleg.turyk.test.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import oleg.turyk.test.dto.user.UserLoginRequestDto;

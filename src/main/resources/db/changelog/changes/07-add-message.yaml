@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-table
+      id: create-messages-table
       author: oleg
       changes:
         - createTable:
-            tableName: users
+            tableName: messages
             columns:
               - column:
                   name: id
@@ -14,26 +14,28 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: password
-                  type: varchar(255)
+                  name: prompt
+                  type: text
                   constraints:
                     nullable: false
               - column:
-                  name: email
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-                    unique: true
-              - column:
-                  name: first_name
-                  type: varchar(255)
+                  name: response
+                  type: text
                   constraints:
                     nullable: false
               - column:
-                  name: last_name
-                  type: varchar(255)
+                  name: timestamp
+                  type: datetime(6)
                   constraints:
                     nullable: false
+              - column:
+                  name: chat_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chats_messages
+                    referencedTableName: messages
+                    referencedColumnNames: id
               - column:
                   name: is_deleted
                   type: boolean
