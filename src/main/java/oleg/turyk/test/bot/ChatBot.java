@@ -64,6 +64,11 @@ public class ChatBot extends TelegramLongPollingBot {
 
     public void writeToUser(Long telegramChatId, WriteToUserRequestDto message) {
         sendMessage(telegramChatId, message.message());
+        oleg.turyk.test.model.Message updateMessage
+                = chatService.findLastMessageByTelegramChatId(telegramChatId);
+        updateMessage.getAdminMessage().add(message.message());
+        //updateMessage.setAdminMessage();
+        chatService.saveMessage(updateMessage);
     }
 
     @Override

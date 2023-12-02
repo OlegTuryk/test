@@ -1,5 +1,6 @@
 package oleg.turyk.test.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,8 +27,8 @@ public class ChatServiceImpl implements ChatService {
     private final ChatMapper chatMapper;
 
     @Override
-    public Message saveMessage(Message message) {
-        return messageRepository.save(message);
+    public void saveMessage(Message message) {
+        messageRepository.save(message);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public ChatDetailsResponseDto getChatDetails(Long id) {
         return chatMapper.toDetailsDto(chatRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chat with id "
+                .orElseThrow(() -> new EntityNotFoundException("Chat with id "
                         + id + " doesn't exist")));
     }
 
@@ -74,6 +75,15 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void deleteMessage(Long id) {
         messageRepository.deleteById(id);
+    }
+
+    @Override
+    public Message findLastMessageByTelegramChatId(Long telegramChatId) {
+        Chat chat = chatRepository.findByTelegramChatId(telegramChatId)
+                .orElseThrow(() -> new EntityNotFoundException("Chat with id "
+                        + telegramChatId + " doesn't exist"));
+        List<Message> messages = chat.getMessages();
+        return messages.get(messages.size() - 1);
     }
 
     private Chat createChat(Long telegramChatId, String firstName, String username) {

@@ -1,6 +1,8 @@
 package oleg.turyk.test.model;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Data;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
@@ -27,6 +31,11 @@ public class Message {
     private String prompt;
     @Column(nullable = false)
     private String response;
+    @ElementCollection
+    @CollectionTable(name = "message_admin_messages",
+            joinColumns = @JoinColumn(name = "message_id"))
+    @Column(name = "admin_message")
+    private List<String> adminMessage = new ArrayList<>();
     @Column(nullable = false)
     private LocalDateTime timestamp;
     @ManyToOne(fetch = FetchType.LAZY)

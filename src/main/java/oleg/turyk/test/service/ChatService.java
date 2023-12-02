@@ -9,7 +9,7 @@ import oleg.turyk.test.model.Message;
 import org.springframework.data.domain.Pageable;
 
 public interface ChatService {
-    Message saveMessage(Message message);
+    void saveMessage(Message message);
 
     Chat findChat(org.telegram.telegrambots.meta.api.objects.Chat chat);
 
@@ -22,4 +22,6 @@ public interface ChatService {
     void deleteChat(Long id);
 
     void deleteMessage(Long id);
+
+    Message findLastMessageByTelegramChatId(Long telegramChatId);
 }
