@@ -8,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import oleg.turyk.test.bot.ChatBot;
 import oleg.turyk.test.dto.chat.ChatDetailsResponseDto;
 import oleg.turyk.test.dto.chat.ChatResponseDto;
+import oleg.turyk.test.dto.message.MessageResponseDto;
 import oleg.turyk.test.dto.message.WriteToUserRequestDto;
 import oleg.turyk.test.service.ChatService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Chats management", description = "Endpoints for managing chats and messages")
@@ -42,9 +45,9 @@ public class ChatController {
                     + "The chat must exist and the telegram chat ID must match")
     @PostMapping("/{telegramChatId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void writeToUser(@PathVariable Long telegramChatId,
-                            @RequestBody @Valid WriteToUserRequestDto write) {
-        chatBot.writeToUser(telegramChatId, write);
+    public MessageResponseDto writeToUser(@PathVariable Long telegramChatId,
+                                          @RequestBody @Valid WriteToUserRequestDto write) {
+        return chatBot.writeToUser(telegramChatId, write);
     }
 
     @Operation(summary = "Get chat details by ID",
@@ -60,6 +63,7 @@ public class ChatController {
             description = "Deletes a chat by its ID."
                     + " The chat must exist and the ID must match")
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteChat(@PathVariable Long id) {
         chatService.deleteChat(id);
@@ -69,6 +73,7 @@ public class ChatController {
             description = "Deletes a message by its ID."
                     + " The message must exist and the ID must match")
     @DeleteMapping("/messages/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteMessage(@PathVariable Long id) {
         chatService.deleteMessage(id);

@@ -3,13 +3,16 @@ package oleg.turyk.test.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import oleg.turyk.test.dto.chat.ChatDetailsResponseDto;
 import oleg.turyk.test.dto.chat.ChatResponseDto;
 import oleg.turyk.test.dto.message.MessageDto;
+import oleg.turyk.test.dto.message.MessageResponseDto;
 import oleg.turyk.test.mapper.ChatMapper;
+import oleg.turyk.test.mapper.MessageMapper;
 import oleg.turyk.test.model.Chat;
 import oleg.turyk.test.model.Message;
 import oleg.turyk.test.repository.ChatRepository;
@@ -25,10 +28,11 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final MessageRepository messageRepository;
     private final ChatMapper chatMapper;
+    private final MessageMapper messageMapper;
 
     @Override
-    public void saveMessage(Message message) {
-        messageRepository.save(message);
+    public MessageResponseDto saveMessage(Message message) {
+        return messageMapper.toDto(messageRepository.save(message));
     }
 
     @Override
@@ -40,10 +44,11 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<MessageDto> getHistory(Long chatId) {
-        Chat chat = chatRepository.findByTelegramChatId(chatId).orElse(null);
-        if (chat == null) {
+        Optional<Chat> chatOptional = chatRepository.findByTelegramChatId(chatId);
+        if (chatOptional.isEmpty()) {
             return new ArrayList<>();
         }
+        Chat chat = chatOptional.get();
         List<Message> messages = getLastMessages(chat.getMessages());
         return messages.stream()
                 .flatMap(message -> Stream.of(
