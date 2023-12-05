@@ -24,6 +24,9 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: admin_message
+                  type: text
+              - column:
                   name: timestamp
                   type: datetime(6)
                   constraints:

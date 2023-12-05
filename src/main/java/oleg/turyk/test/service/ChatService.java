@@ -4,12 +4,13 @@ import java.util.List;
 import oleg.turyk.test.dto.chat.ChatDetailsResponseDto;
 import oleg.turyk.test.dto.chat.ChatResponseDto;
 import oleg.turyk.test.dto.message.MessageDto;
+import oleg.turyk.test.dto.message.MessageResponseDto;
 import oleg.turyk.test.model.Chat;
 import oleg.turyk.test.model.Message;
 import org.springframework.data.domain.Pageable;
 
 public interface ChatService {
-    Message saveMessage(Message message);
+    MessageResponseDto saveMessage(Message message);
 
     Chat findChat(org.telegram.telegrambots.meta.api.objects.Chat chat);
 
@@ -22,4 +23,6 @@ public interface ChatService {
     void deleteChat(Long id);
 
     void deleteMessage(Long id);
+
+    Message findLastMessageByTelegramChatId(Long telegramChatId);
 }

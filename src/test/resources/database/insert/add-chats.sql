@@ -1,0 +1,2 @@
+INSERT INTO chats (id, telegram_chat_id, first_name, username, is_deleted) VALUES (1, 123456789, 'Alice', 'alice123', false);
+INSERT INTO chats (id, telegram_chat_id, first_name, username, is_deleted) VALUES (2, 987654321, 'Bob', 'bob123', false);

@@ -13,6 +13,7 @@ public interface MessageMapper {
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "timestamp", expression = "java(LocalDateTime.now())")
     @Mapping(target = "chat.id", source = "chatId")
+    @Mapping(target = "adminMessage", ignore = true)
     Message toEntity(String prompt, String response, Long chatId);
 
     MessageResponseDto toDto(Message message);

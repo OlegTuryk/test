@@ -1,0 +1,2 @@
+INSERT INTO users (password, email, first_name, last_name, is_deleted) VALUES ('$2a$10$X15B5JIfbDItKTstPrQeAuFZTBP2gRFSZ80C3vVmWOSm065s.nIqG', 'bob@example.com', 'Bob', 'Smith', false);
+INSERT INTO user_role (user_id, role_id) VALUES (currval(pg_get_serial_sequence('users', 'id')), 1);

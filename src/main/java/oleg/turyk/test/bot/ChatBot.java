@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import oleg.turyk.test.dto.message.MessageDto;
+import oleg.turyk.test.dto.message.MessageResponseDto;
 import oleg.turyk.test.dto.message.WriteToUserRequestDto;
 import oleg.turyk.test.mapper.MessageMapper;
 import oleg.turyk.test.model.Chat;
@@ -62,8 +63,12 @@ public class ChatBot extends TelegramLongPollingBot {
         }
     }
 
-    public void writeToUser(Long telegramChatId, WriteToUserRequestDto message) {
+    public MessageResponseDto writeToUser(Long telegramChatId, WriteToUserRequestDto message) {
         sendMessage(telegramChatId, message.message());
+        oleg.turyk.test.model.Message updateMessage
+                = chatService.findLastMessageByTelegramChatId(telegramChatId);
+        updateMessage.getAdminMessage().add(message.message());
+        return chatService.saveMessage(updateMessage);
     }
 
     @Override

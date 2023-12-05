@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-message-admin-messages-table
+      author: oleg
+      changes:
+        - createTable:
+            tableName: message_admin_messages
+            columns:
+              - column:
+                  name: message_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: admin_message
+                  type: text
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: add-foreign-key-constraints-to-message-admin-messages-table
+      author: oleg
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: message_admin_messages
+            baseColumnNames: message_id
+            constraintName: fk_message_admin_messages_message_id
+            referencedTableName: messages
+            referencedColumnNames: id
