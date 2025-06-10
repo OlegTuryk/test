@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     restart: unless-stopped
-    image: test_app
+    image: chatbuddy_app
     build: .
     env_file: ./.env
     ports:
